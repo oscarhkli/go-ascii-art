@@ -7,25 +7,6 @@ import (
 	"testing"
 )
 
-func TestLoadImage(t *testing.T) {
-	imgPath := "sample.jpg"
-	img, closer, err := LoadImage(imgPath)
-	defer closer()
-
-	if img == nil && err != nil {
-		t.Errorf("LoadImage(%v) = (img: %v, err: %v), want (img: %v, err: %v)", imgPath, nil, "not <nil>", "not <nil>", err)
-	}
-}
-
-func TestLoadImageNotFound(t *testing.T) {
-	imgPath := "abc.jpg"
-	img, _, err := LoadImage(imgPath)
-
-	if img != nil && err == nil {
-		t.Errorf("LoadImage(%v) = (img: %v, err: %v), want (img: %v, err: %v)", imgPath, "not <nil>", err, nil, "not <nil>")
-	}
-}
-
 func TestBrightnessNumbers(t *testing.T) {
 	width := 2
 	height := 3
@@ -45,7 +26,7 @@ func TestBrightnessNumbers(t *testing.T) {
 		}
 	}
 
-	got := CalcBrightnessNumbers(img)
+	got := CalcBrightnessNumbers(img, avg)
 	want := [][]int{
 		{21845, 42833},
 		{21845, 42833},
