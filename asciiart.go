@@ -42,6 +42,30 @@ func LoadImage(imgPath string) (image.Image, func(), error) {
 	return img, closer, nil
 }
 
+// Resize by Nearest Neighbour
+func ResizeImage(img image.Image, ratio float64) image.Image {
+	if ratio == 1 {
+		return img
+	}
+
+	width := int(float64(img.Bounds().Dx()) * ratio)
+	height := int(float64(img.Bounds().Dy()) * ratio)
+	upLeft := image.Point{0, 0}
+	lowRight := image.Point{width, height}
+	newImg := image.NewRGBA(image.Rectangle{upLeft, lowRight})
+
+	for y := range height {
+		for x := range width {
+			srcX := int(float64(x)/ratio + float64(img.Bounds().Min.X))
+			srcY := int(float64(y)/ratio + float64(img.Bounds().Min.Y))
+
+			newImg.Set(x, y, img.At(srcX, srcY))
+		}
+	}
+
+	return newImg
+}
+
 func CreateASCIIArt(img image.Image, bCalc BrightnessCalc) string {
 	l := len(grayscale)
 	var sb strings.Builder
@@ -93,6 +117,10 @@ func CalcBrightnessNumbers(img image.Image, bCalc BrightnessCalc) [][]int {
 func main() {
 	method := ""
 	flag.StringVar(&method, "c", "hsl", "Brightness Calculation Method {avg | hsl | hsp}")
+
+	ratio := 0.0
+	flag.Float64Var(&ratio, "ratio", 1, "Resize scale. 0.5 = half, 1 = original")
+
 	flag.Parse()
 
 	args := flag.Args()
@@ -101,6 +129,10 @@ func main() {
 	} else if len(args) > 2 {
 		flag.Usage()
 		os.Exit(1)
+	}
+
+	if ratio < 0.01 || ratio > 2 {
+		log.Fatal("Resize scale can be within 0.01 to 2")
 	}
 
 	img, closer, err := LoadImage(args[0])
@@ -125,7 +157,9 @@ func main() {
 		log.Println("Brightness Calculation Method:", method)
 	}
 
-	asciiArt := CreateASCIIArt(img, bCalc)
+	resizedImg := ResizeImage(img, ratio)
+
+	asciiArt := CreateASCIIArt(resizedImg, bCalc)
 
 	outputFilePath := "out/ascii.txt"
 	if len(args) > 1 {
