@@ -89,6 +89,10 @@ func avg(r, g, b int) int {
 	return (int(r) + int(g) + int(b)) / 3
 }
 
+func hsv(r, g, b int) int {
+	return (max(r, g, b))
+}
+
 func hsl(r, g, b int) int {
 	return (max(r, g, b) + min(r, g, b)) / 2
 }
@@ -116,7 +120,7 @@ func CalcBrightnessNumbers(img image.Image, bCalc BrightnessCalc) [][]int {
 
 func main() {
 	method := ""
-	flag.StringVar(&method, "c", "hsl", "Brightness Calculation Method {avg | hsl | hsp}")
+	flag.StringVar(&method, "c", "hsl", "Brightness Calculation Method {avg | hsl | hsp | hsv}")
 
 	ratio := 0.0
 	flag.Float64Var(&ratio, "ratio", 1, "Resize scale. 0.5 = half, 1 = original")
@@ -147,6 +151,7 @@ func main() {
 		"avg": avg,
 		"hsl": hsl,
 		"hsp": hsp,
+		"hsv": hsv,
 	}
 
 	bCalc, ok := bCalcMap[method]

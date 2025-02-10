@@ -26,14 +26,11 @@ func TestBrightnessNumbers(t *testing.T) {
 		}
 	}
 
-	got := CalcBrightnessNumbers(img, avg)
-	want := [][]int{
+	if got, want := CalcBrightnessNumbers(img, avg), [][]int{
 		{21845, 42833},
 		{21845, 42833},
 		{21845, 42833},
-	}
-
-	if !reflect.DeepEqual(got, want) {
+	}; !reflect.DeepEqual(got, want) {
 		t.Errorf("CalcBrightnessNumbers(%v) = %v, want %v", "image with left half red and right half cyan", got, want)
 	}
 }
@@ -44,12 +41,7 @@ func TestBrightnessBlack(t *testing.T) {
 	img := image.NewRGBA(image.Rectangle{upLeft, lowRight})
 	img.Set(0, 0, color.Black)
 
-	got := CalcBrightnessNumbers(img, avg)
-	want := [][]int{
-		{0},
-	}
-
-	if !reflect.DeepEqual(got, want) {
+	if got, want := CalcBrightnessNumbers(img, avg), [][]int{{0}}; !reflect.DeepEqual(got, want) {
 		t.Errorf("CalcBrightnessNumbers(%v) = %v, want %v", "image with single white pixel", got, want)
 	}
 }
@@ -60,12 +52,7 @@ func TestBrightnessWhite(t *testing.T) {
 	img := image.NewRGBA(image.Rectangle{upLeft, lowRight})
 	img.Set(0, 0, color.White)
 
-	got := CalcBrightnessNumbers(img, avg)
-	want := [][]int{
-		{65535},
-	}
-
-	if !reflect.DeepEqual(got, want) {
+	if got, want := CalcBrightnessNumbers(img, avg), [][]int{{65535}}; !reflect.DeepEqual(got, want) {
 		t.Errorf("CalcBrightnessNumbers(%v) = %v, want %v", "image with white black pixel", got, want)
 	}
 }
@@ -76,10 +63,7 @@ func TestCreateASCIIArtBlack(t *testing.T) {
 	img := image.NewRGBA(image.Rectangle{upLeft, lowRight})
 	img.Set(0, 0, color.Black)
 
-	got := CreateASCIIArt(img, avg)
-	want := "``\n"
-
-	if got != want {
+	if got, want := CreateASCIIArt(img, avg), "``\n"; got != want {
 		t.Errorf("CreateASCIIArt(%v) = %v, want %v", "image with single black pixel", got, want)
 	}
 }
@@ -90,10 +74,7 @@ func TestCreateASCIIArtWhite(t *testing.T) {
 	img := image.NewRGBA(image.Rectangle{upLeft, lowRight})
 	img.Set(0, 0, color.White)
 
-	got := CreateASCIIArt(img, avg)
-	want := "@@\n"
-
-	if got != want {
+	if got, want := CreateASCIIArt(img, avg), "@@\n"; got != want {
 		t.Errorf("CreateASCIIArt(%v) = %v, want %v", "image with single white pixel", got, want)
 	}
 }
