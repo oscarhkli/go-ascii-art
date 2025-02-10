@@ -28,3 +28,4 @@ bin/
 Makefile
 images/
 out/
+.DS_Store

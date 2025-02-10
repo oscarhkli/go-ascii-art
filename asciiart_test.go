@@ -37,3 +37,63 @@ func TestBrightnessNumbers(t *testing.T) {
 		t.Errorf("CalcBrightnessNumbers(%v) = %v, want %v", "image with left half red and right half cyan", got, want)
 	}
 }
+
+func TestBrightnessBlack(t *testing.T) {
+	upLeft := image.Point{0, 0}
+	lowRight := image.Point{1, 1}
+	img := image.NewRGBA(image.Rectangle{upLeft, lowRight})
+	img.Set(0, 0, color.Black)
+
+	got := CalcBrightnessNumbers(img, avg)
+	want := [][]int{
+		{0},
+	}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("CalcBrightnessNumbers(%v) = %v, want %v", "image with single white pixel", got, want)
+	}
+}
+
+func TestBrightnessWhite(t *testing.T) {
+	upLeft := image.Point{0, 0}
+	lowRight := image.Point{1, 1}
+	img := image.NewRGBA(image.Rectangle{upLeft, lowRight})
+	img.Set(0, 0, color.White)
+
+	got := CalcBrightnessNumbers(img, avg)
+	want := [][]int{
+		{65535},
+	}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("CalcBrightnessNumbers(%v) = %v, want %v", "image with white black pixel", got, want)
+	}
+}
+
+func TestCreateASCIIArtBlack(t *testing.T) {
+	upLeft := image.Point{0, 0}
+	lowRight := image.Point{1, 1}
+	img := image.NewRGBA(image.Rectangle{upLeft, lowRight})
+	img.Set(0, 0, color.Black)
+
+	got := CreateASCIIArt(img, avg)
+	want := "``\n"
+
+	if got != want {
+		t.Errorf("CreateASCIIArt(%v) = %v, want %v", "image with single black pixel", got, want)
+	}
+}
+
+func TestCreateASCIIArtWhite(t *testing.T) {
+	upLeft := image.Point{0, 0}
+	lowRight := image.Point{1, 1}
+	img := image.NewRGBA(image.Rectangle{upLeft, lowRight})
+	img.Set(0, 0, color.White)
+
+	got := CreateASCIIArt(img, avg)
+	want := "@@\n"
+
+	if got != want {
+		t.Errorf("CreateASCIIArt(%v) = %v, want %v", "image with single white pixel", got, want)
+	}
+}

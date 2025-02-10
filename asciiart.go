@@ -16,7 +16,7 @@ import (
 
 const (
 	grayscale     string = "`.-':_,^=;><+!rc*/z?sLTv)J7(|Fi{C}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@"
-	maxBrightness int    = 65535
+	maxBrightness int    = 65536
 	repeat        int    = 2
 )
 
